@@ -29,7 +29,7 @@ class MochilaFMS {
 		);
 		
 		if($json_response===false) {
-			$this->last_error = error_get_last();
+			$this->last_error = var_export(error_get_last(),true);
 			return false;
 		}
 		
@@ -44,6 +44,39 @@ class MochilaFMS {
 		}
 		return $response;
 		
+	}
+	
+	function simulate_create_item($item_data) {
+		return $this->do_post("item/simulate_create",array(
+			"apikey"=>$this->apikey,
+			"client_id"=>$this->client_id,
+			"item_data"=>$item_data
+		));
+	}
+	
+	function notify_inbound_inventory($inbound_container_id,$items) {
+		return $this->do_post("inventory/notify_inbound",array(
+			"apikey"=>$this->apikey,
+			"client_id"=>$this->client_id,
+			"truck_id"=>$inbound_container_id,
+			"items"=>$items
+		));
+	}
+	
+	function simulate_inbound_receive($inbound_container_id) {
+		return $this->do_post("inventory/simulate_inbound_receive",array(
+			"apikey"=>$this->apikey,
+			"client_id"=>$this->client_id,
+			"truck_id"=>$inbound_container_id
+		));
+	}
+	
+	function simulate_ship($fr_id) {
+		return $this->do_post("request/simulate_ship",array(
+			"apikey"=>$this->apikey,
+			"client_id"=>$this->client_id,
+			"fr_id"=>$fr_id
+		));
 	}
 	
 	function request_fulfillment(MochilaFR $fulfillment_request) {
