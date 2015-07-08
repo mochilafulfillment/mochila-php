@@ -89,6 +89,34 @@ class MochilaFMS {
 		return $this->do_post("shipment/get_confirmed",array("apikey"=>$this->apikey,"client_id"=>$this->client_id));
 	}
 	
+	function get_request_status($fulfillment_request_id) {
+		return $this->do_post("request/get_status",array("apikey"=>$this->apikey,"client_id"=>$this->client_id,"fr_id"=>$fulfillment_request_id));
+	}
+	
+	function get_available_quantities() {
+		$offset = 0;
+		
+		$records = array();
+		
+		while(true) {
+			$response =  $this->do_post("inventory/available_quantity_for_all",array("apikey"=>$this->apikey,"client_id"=>$this->client_id,"offset"=>$offset));
+			if($response===false) {
+				return false;
+			} else {
+				foreach($response['records'] as $newrec) {
+					$records[] = $newrec;
+				}
+				$offset = $offset+count($response['records']);
+				if($offset >= $response['total_record_count']) {
+					return $records;
+				}
+			}
+		}
+	}
+	
+	function item_available_quantity($upc) {
+		return $this->do_post("item/available_quantity",array("apikey"=>$this->apikey,"client_id"=>$this->client_id,"upc"=>$upc));
+	}
 }
 
 class MochilaLineItem {

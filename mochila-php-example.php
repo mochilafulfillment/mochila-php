@@ -68,6 +68,24 @@ if($receive_response===false) {
 
 sleep(3);
 
+$item_available_response = $fms->item_available_quantity($test_item_upc);
+if($item_available_response===false) {
+	echo "Error in receive: ".$fms->last_error."\n";
+	exit();
+} else {
+	echo "Item available quantity response: ".var_export($item_available_response,true)."\n";
+}
+
+
+$available_quantities_response = $fms->get_available_quantities();
+if($available_quantities_response===false) {
+	echo "Error in getting available quantities: ".$fms->last_error."\n";
+	exit();
+} else {
+	echo "All available quantities response: ".var_export($available_quantities_response,true)."\n";
+}
+
+
 $test_fr_id = uniqid();
 $fr = new MochilaFR(
 	$test_fr_id,
@@ -105,7 +123,7 @@ if($fr_response===false) {
 	echo "Fulfillment request response: ".var_export($fr_response,true)."\n";
 }
 
-sleep(3);
+sleep(7);
 
 $ship_response = $fms->simulate_ship($test_fr_id);
 if($ship_response===false) {
@@ -121,4 +139,12 @@ if($tracking_response===false) {
 	exit();
 } else {
 	echo "Get shipment confirmations response: ".var_export($tracking_response,true)."\n";
+}
+
+$status_response = $fms->get_request_status($test_fr_id);
+if($status_response===false) {
+	echo "Error in getting status: ".$fms->last_error."\n";
+	exit();
+} else {
+	echo "Get status response: ".var_export($status_response,true)."\n";
 }
