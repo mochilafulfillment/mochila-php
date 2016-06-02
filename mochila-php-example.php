@@ -1,14 +1,14 @@
 <?php
 
 include 'mochila-php.php';
-//this is a file where the real credentials are stored in the global variables 
-//$HOST, $CLIENT_ID, and $APIKEY
-//it is not included in version control
-include 'credentials.php';
+$HOST= '[test host]';
+$APIKEY= '[test client api key]';
+$CLIENT_ID='[test client id]';
+$SHIP_PROFILE_ID='[test ship profile id]';
 
 //not real credentials obviously
 $fms = new MochilaFMS(
-	"http://$HOST/api/v2/",
+	"https://$HOST/api/v2/",
 	$APIKEY,
 	$CLIENT_ID
 );
@@ -103,7 +103,7 @@ $fr = new MochilaFR(
         "ship_to_phone"=>"555-555-5555",
         "ship_to_email"=>"",
         "sat_delivery"=>0,
-        "ship_profile_id"=>"MBH1",
+        "ship_profile_id"=>$SHIP_PROFILE_ID,
         "transfer_out"=>0,
         "reference"=>"",
         "ship_method"=>"STANDARD_OVERNIGHT",
